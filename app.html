@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hoc Toolkit</title>
+<style>
+  :root {
+    --bg: #0f1221; --card: #1a1f35; --card2: #232a45; --line: #333a5c;
+    --txt: #e8ecff; --muted: #9aa3c7; --accent: #4f8cff; --accent2: #22c55e;
+    --danger: #ef4444; --warn: #f59e0b;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--txt);
+    font: 14px/1.5 system-ui, "Segoe UI", Roboto, sans-serif; padding: 24px 18px 60px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 18px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+  .tab { padding: 10px 16px; border-radius: 10px; border: 1px solid var(--line);
+    background: var(--card2); color: var(--muted); font-weight: 700; cursor: pointer; }
+  .tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .step { background: var(--card); border: 1px solid var(--line);
+    border-radius: 14px; padding: 18px 18px 20px; margin-bottom: 16px; }
+  .step h2 { font-size: 15px; margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+  .num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; }
+  label { display: block; font-size: 13px; color: var(--muted); margin: 10px 0 4px; }
+  input[type=text], input[type=password] { width: 100%; padding: 10px 12px; border-radius: 9px;
+    border: 1px solid var(--line); background: var(--card2); color: var(--txt); font-size: 14px; }
+  input::placeholder { color: #6b74a0; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  button { border: 0; border-radius: 9px; padding: 10px 16px; font-size: 14px; font-weight: 600;
+    cursor: pointer; background: var(--card2); color: var(--txt); border: 1px solid var(--line); }
+  button:hover:not(:disabled) { filter: brightness(1.12); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  button.go { background: var(--accent2); border-color: var(--accent2); color: #04210f; }
+  button.stop { background: var(--danger); border-color: var(--danger); color: #fff; }
+  .pill { font-size: 12px; padding: 4px 10px; border-radius: 20px; background: var(--card2);
+    border: 1px solid var(--line); color: var(--muted); }
+  .pill.ok { color: var(--accent2); border-color: #1f6b3b; }
+  .pill.warn { color: var(--warn); border-color: #6b4e1f; }
+  .opts { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; }
+  .opts label { display: inline-flex; align-items: center; gap: 7px; margin: 0; color: var(--txt); cursor: pointer; }
+  .help { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  .help a { color: var(--accent); }
+  .progress-wrap { height: 10px; background: var(--card2); border-radius: 6px; overflow: hidden;
+    margin: 14px 0 8px; border: 1px solid var(--line); }
+  .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg,#4f8cff,#22c55e); transition: width .2s; }
+  .stat { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .stat b { color: var(--txt); }
+  #log { margin-top: 12px; background: #0a0d1a; border: 1px solid var(--line); border-radius: 9px;
+    padding: 10px 12px; height: 240px; overflow: auto;
+    font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; }
+  .log-ok { color: #6ee7a8; } .log-skip { color: #8aa0d8; } .log-err { color: #ff9b9b; }
+  .log-dir { color: #ffd479; } .log-info { color: var(--muted); }
+  .minilist { background: #0a0d1a; border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px;
+    height: 180px; overflow: auto; font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace; }
+  .minilist div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mi-ok { color: #6ee7a8; } .mi-skip { color: #ff9b9b; } .mi-plain { color: var(--muted); }
+  .mi-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 3px 0; color: var(--warn); }
+  .yt-btn { font-size: 11px; padding: 3px 9px; border-radius: 6px; background: #c4302b; border: 1px solid #c4302b; color: #fff; cursor: pointer; flex: none; }
+  .yt-btn:hover:not(:disabled) { filter: brightness(1.12); } .yt-btn:disabled { opacity: .5; cursor: default; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🎓 Hoc Toolkit</h1>
+  <p class="sub">Tai video/SRT tu Google Drive &middot; Tao muc luc tu playlist YouTube vao web hoc &middot; Nap SRT hang loat.</p>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="drive">📥 Tai tu Drive</div>
+    <div class="tab" data-tab="web">🎬 Playlist &rarr; Web hoc</div>
+    <div class="tab" data-tab="ytdub">📺 Dub YouTube</div>
+  </div>
+  <p class="help" style="margin:-8px 0 14px">📺 <b>Xuat ban YouTube hang loat</b>: mo YouTube Studio &rarr; Noi dung, bang dieu khien se tu hien o <b>goc phai</b> trang do.</p>
+
+  <!-- ===================== TAB: DRIVE ===================== -->
+  <div id="tabDrive">
+    <div class="step">
+      <h2><span class="num">1</span> Nhap link Drive + Dang nhap</h2>
+      <label>Link thu muc Google Drive</label>
+      <input id="driveUrl" type="text" placeholder="https://drive.google.com/drive/folders/..." />
+      <label>Dang nhap tai khoan Google (duoc chia se thu muc)</label>
+      <div class="row">
+        <button id="signin" class="primary">Dang nhap Google</button>
+        <button id="signout" style="display:none">Dang xuat</button>
+        <span id="authStatus" class="pill">Chua dang nhap</span>
+      </div>
+      <div class="help">Dung chinh tai khoan duoc chia se thu muc. Lan dau se hien man hinh xin quyen chi doc Drive.</div>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">2</span> Chon noi luu + loai tai</h2>
+      <div class="row">
+        <button id="pickDir" class="primary">Chon thu muc luu...</button>
+        <span id="dirStatus" class="pill">Chua chon thu muc</span>
+      </div>
+      <label style="margin-top:14px">Loai file tai ve</label>
+      <div class="opts">
+        <label><input type="radio" name="dlMode" value="video" checked /> Chi video</label>
+        <label><input type="radio" name="dlMode" value="srt" /> Chi phu de SRT</label>
+        <label><input type="radio" name="dlMode" value="both" /> Video + SRT</label>
+      </div>
+      <div class="opts" style="margin-top:10px">
+        <label><input type="checkbox" id="optRoot" checked /> Tao thu muc goc theo ten khoa hoc</label>
+        <label><input type="checkbox" id="optSkip" checked /> Bo qua file da tai (resume)</label>
+      </div>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">3</span> Chay</h2>
+      <div class="row">
+        <button id="run" class="go" disabled>Bat dau tai</button>
+        <button id="stop" class="stop" disabled>Dung</button>
+      </div>
+      <div class="progress-wrap"><div id="bar" class="progress-bar"></div></div>
+      <div class="stat">
+        <span>Thu muc: <b id="cDir">0</b></span>
+        <span>Da tai: <b id="cDone">0</b></span>
+        <span>Bo qua: <b id="cSkip">0</b></span>
+        <span>Loi: <b id="cErr">0</b></span>
+        <span>Tong: <b id="cTotal">0</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TAB: WEB HOC ===================== -->
+  <div id="tabWeb" hidden>
+    <div class="step">
+      <h2><span class="num">0</span> Web hoc</h2>
+      <div class="row">
+        <span id="webStatus" class="pill">Dang kiem tra...</span>
+        <button id="openWeb">Mo web hoc</button>
+      </div>
+      <div class="help">Can mo tab web hoc (<b>phong11231.github.io/WISDOM_ACCUMULATION</b>) va <b>dang nhap san</b>.
+        Extension se ghi thang vao tai khoan dang dang nhap do.</div>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">1</span> Tao muc luc tu playlist</h2>
+      <label>Link danh sach phat YouTube</label>
+      <input id="plUrl" type="text" placeholder="https://youtube.com/playlist?list=..." />
+      <div class="row" style="margin-top:12px">
+        <button id="makeToc" class="go">Tao muc luc vao web hoc</button>
+      </div>
+      <div class="help">Cu phap tieu de: <b>page X page Y</b> &rarr; Chuong X / Bai Y. Tu sap xep tang dan.</div>
+    </div>
+
+    <div class="step">
+      <h2><span class="num">2</span> Nap SRT hang loat</h2>
+      <div class="row">
+        <button id="loadSrt" class="go">Chon thu muc SRT</button>
+      </div>
+      <div class="help">Dat ten file SRT kieu <b>page_1_page_(1).srt</b>. Chon folder xong se hien <b>so sanh truoc</b>;
+        SRT cua bai <b>chua co tren web se bi bo qua</b>.</div>
+
+      <div id="srtPreview" hidden style="margin-top:14px">
+        <div class="stat" style="margin-bottom:8px">
+          <span>Se nap (moi): <b id="spMatch">0</b></span>
+          <span>Bo qua: <b id="spExtra">0</b></span>
+          <span>Bai chua co srt: <b id="spMiss">0</b></span>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:230px">
+            <div class="help" style="margin:0 0 4px"><b>📘 Bai co tren web</b> (<span id="spWebN">0</span>)</div>
+            <div id="spWeb" class="minilist"></div>
+          </div>
+          <div style="flex:1;min-width:230px">
+            <div class="help" style="margin:0 0 4px"><b>📄 SRT trong folder</b> (<span id="spSrtN">0</span>)</div>
+            <div id="spSrt" class="minilist"></div>
+          </div>
+        </div>
+        <div id="srtMissingBox" hidden style="margin-top:10px">
+          <div class="help" style="margin:0 0 4px"><b>⬇ Bai THIEU srt</b> — bam de COPY lenh yt-dlp (Linux + Windows) tai phu de, chay o Terminal:</div>
+          <div id="srtMissingList" class="minilist" style="height:140px"></div>
+        </div>
+        <div class="row" style="margin-top:10px">
+          <button id="srtConfirm" class="go">Nap bai moi</button>
+          <button id="srtCancel">Huy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== TAB: DUB YOUTUBE ===================== -->
+  <div id="tabYtDub" hidden>
+    <div class="step">
+      <h2><span class="num">1</span> Nap SRT vao extension (de long tieng tren YouTube)</h2>
+      <label>Link danh sach phat YouTube</label>
+      <input id="dubPlUrl" type="text" placeholder="https://youtube.com/playlist?list=..." />
+      <div class="row" style="margin-top:12px">
+        <button id="dubScan" class="go">Quet playlist + chon thu muc SRT + nap</button>
+        <button id="dubClear" class="stop">Xoa SRT da luu</button>
+      </div>
+      <div class="help">Khop srt theo <b>page X page Y</b> &rarr; luu vao extension theo videoId. Sau do mo video do tren
+        <b>youtube.com/watch</b> &rarr; goc phai hien bang <b>"Long tieng"</b> tu doc tieng Viet dong bo (y het web hoc).
+        Video thieu srt se liet ke de ban tai bang yt-dlp roi nap lai.</div>
+      <div id="dubMissingBox" hidden style="margin-top:14px">
+        <div class="help" style="margin:0 0 4px"><b>⬇ Video THIEU srt</b> — bam de COPY lenh yt-dlp (Linux + Windows):</div>
+        <div id="dubMissingList" class="minilist" style="height:140px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="log"></div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

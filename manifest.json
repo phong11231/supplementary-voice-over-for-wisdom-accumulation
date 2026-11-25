@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "Hoc Toolkit (Drive + Playlist)",
+  "version": "2.0",
+  "description": "Tai video/SRT tu Google Drive; tao muc luc tu playlist YouTube vao web hoc dang dang nhap; nap SRT hang loat theo ten page_X_page_Y.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA94tOrvNrANupZhrkVlj/TCOl2jdh80nzMcnhjeglZagfx3ZblHTPclk2uRXtIj7JI9YMyQPtVmIZvdL+nTKutxw1yyI8NT8FiR2nDJwtY/twKYx6U9zAyXITwuvdTUyqJ0g+kmFesSTpcAv/OIVcHTGVaJ/ra1XKwSU/uWvnZqrLrP6v/osBlsbppSAK0RrKvNXc7ORPry7OwLlC4QkK3pl+Fr69KhYdqaMj0aHaJbB/MoLA4qpbMod85RqFp10mIg91YDLoYPF3Dp8TTt7inwhgen5Y1V9sh7Y7vR0JBkQdAolld6Kywj7h81HMv9lvW84iDIXKYaAbxek/DcGfwQIDAQAB",
+  "permissions": ["storage", "unlimitedStorage", "identity", "scripting", "tabs"],
+  "host_permissions": [
+    "https://www.googleapis.com/*",
+    "https://www.youtube.com/*",
+    "https://m.youtube.com/*",
+    "https://studio.youtube.com/*",
+    "https://phong11231.github.io/*"
+  ],
+  "oauth2": {
+    "client_id": "909922477358-lu6bdsfd4c8pcuvnmrfc981gg6puan4q.apps.googleusercontent.com",
+    "scopes": ["https://www.googleapis.com/auth/drive.readonly"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://studio.youtube.com/*"],
+      "js": ["studio-panel.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": ["https://www.youtube.com/watch*"],
+      "js": ["yt-dub.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Hoc Toolkit"
+  }
+}
